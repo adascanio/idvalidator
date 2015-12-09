@@ -216,6 +216,43 @@ QUnit.module("Check options and methods", function(){
 		
 	});
 
+	QUnit.test( "Check method getRepeatedIds: Decoration is not done on any items and list of duplicate ids is returned", function( assert ) {
+
+		var $body = $("body").idvalidator("clean");
+
+		var duplicateItems = $body.idvalidator("getRepeatedIds");
+
+		assertCleanElement(assert, $body, "#repeated-id");
+		assertIdsObjectOnBody(assert, duplicateItems);
+		
+	});
+
+	QUnit.test( "Check method getRepeatedIds: Decoration is not done on any items and list of duplicate ids is returned, no data is added on body", function( assert ) {
+
+		var $body = $("body").idvalidator("clean");
+
+		var duplicateItems = $body.idvalidator("getRepeatedIds");
+
+		assertCleanElement(assert, $body, "#repeated-id");
+		assertIdsObjectOnBody(assert, duplicateItems);
+		assert.ok($body.data("dupes") == null, "No dupes data found on body tag");
+		
+	});
+
+	QUnit.test( "Check method getRepeatedIds: duplicate is found on body directly and it is still there after retrieving, as well as the whole decoration", function( assert ) {
+
+		var $body = $("body").idvalidator("clean").idvalidator();
+
+		var duplicateItems = $body.idvalidator("getRepeatedIds");
+
+		assertDecoratedElement(assert, $body, true, "#repeated-id");
+		assertIdsObjectOnBody(assert, duplicateItems);
+		assert.ok($body.data("dupes") != null, "Dupes data found on body tag");
+		
+		
+	});
+
+
 
 	// /**
 	//  * Decorate the html elements with more tag for visual feedback

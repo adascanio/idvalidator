@@ -18,6 +18,16 @@
 		var dupeIds = {};
 		var ids = {};
 
+		var __isValidatorRoot = function($elm) {
+			if ($elm.hasClass(VALIDATOR_ROOT_CLASS)) {
+				true;
+			}
+		};
+
+		var __getDupesFromElm = function($elm) {
+			return $elm.data(DUPE_DATA_NAME);
+		};
+
 		var __decorateDupeElm = function($elm, elmId){
 			if (!prop.dry) {
 				$elm.addClass(DUPE_CLASS + " "+ DUPE_ID_CLASS);
@@ -46,18 +56,25 @@
 				
 			}	
 		};
-
+		
 		var __initIds = function($elm) {
 			
 			__pushId($elm);
-			$elm.addClass(VALIDATOR_ROOT_CLASS);
 			
 			$("[id]", $elm).each(function(idx, item){
 				__pushId($(item));	
 			});
 
+		};
+
+		var __init = function($elm) {
+			
+			__initIds($elm);
+			
+			$elm.addClass(VALIDATOR_ROOT_CLASS);
 			$elm.data(DUPE_DATA_NAME, $.extend({},dupeIds));
 		};
+		
 
 		var __checkDuplicate = function(value, attr) {
 			attr = attr || "id";
@@ -101,10 +118,24 @@
 		var methods = {
 
 			init : function () {
-					__initIds($this);
+				__init($this);
+				return $this;
 			},
 			clean : function() {
 				return __clean($this);
+			},
+			getRepeatedIds : function() {
+				prop.dry = true;
+
+				var objDupes = __getDupesFromElm($this);
+
+				//return object stored in the element if exist (i.e. idvalidator alreay been called)
+				if  (objDupes != null) {
+					return objDupes;
+				}
+
+				__initIds($this);
+				return dupeIds;
 			}
 
 		}
@@ -115,8 +146,8 @@
           
         } else if ( typeof options === 'object' || !options ) {
             
-            methods.init();
-            return $this;
+            return methods.init();
+            
         } else {
             $.error( 'Method ' +  options + ' does not exist on idvalidator' );
         }  
