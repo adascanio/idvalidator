@@ -19,9 +19,11 @@
 		var ids = {};
 
 		var __decorateDupeElm = function($elm, elmId){
-			$elm.addClass(DUPE_CLASS + " "+ DUPE_ID_CLASS);
-			$elm.attr(DUPE_DATA_ATTR, elmId);
-
+			if (!prop.dry) {
+				$elm.addClass(DUPE_CLASS + " "+ DUPE_ID_CLASS);
+				$elm.attr(DUPE_DATA_ATTR, elmId);
+			}
+			
 		};
 
 		var __pushId = function($elm) {

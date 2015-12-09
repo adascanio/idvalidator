@@ -6,20 +6,53 @@ function getSize(obj) {
     return size;
 };
 
-function assertCleanElement (assert, $elm) {
+function assertCleanElement (assert, $elm,  childSelector) {
 	assert.ok($elm.data("dupes") == null, "No data is attached to element");
-	assertNotDecoratedElement(assert, $elm);
+	assertDecoratedElement(assert, $elm, false, childSelector);
 }
 
-function assertNotDecoratedElement (assert, $elm) {
-	assert.ok($elm.hasClass("idvalidator-root") == false, "No class decoration is added to root item");
-	assert.ok($("#repeated-id", $elm).hasClass("idvalidator-dupe") == false, "No class decoration is added to repeated id item");
-	assert.ok($("#repeated-id", $elm).attr("data-idvalidator-dupe") == null, "No attribute decoration is added to repeated id item");
+function asserDecoratedRoot (assert, $root, isDecorated) {
+	var message = "idvalidator-root class decoration ";
+	message += isDecorated? "added" : "not added";
+	assert.ok($root.hasClass("idvalidator-root") == isDecorated, message);
 }
 
-function assertDryElement (assert, $elm) {
+function assertDecoratedElement (assert, $root, isDecorated, childSelector) {
+
+	var prefix = "";
+
+	var hasDataDeco = ($(childSelector, $root).attr("data-idvalidator-dupe") != null) == isDecorated;
+	var hasClassDeco = $(childSelector, $root).hasClass("idvalidator-dupe") == isDecorated;
+	if  (!isDecorated) {
+		prefix = "No  ";
+		
+	}
+
+	assert.ok(hasClassDeco, prefix + "class decoration is added to " + childSelector +" item");
+	assert.ok(hasDataDeco, prefix + "attribute decoration is added to " + childSelector + " item");
+}
+
+function assertDryElement (assert, $elm, childSelector) {
 	assert.ok($elm.data("dupes"), "Repeated ids data is attached to element");
-	assertNotDecoratedElement(assert, $elm);
+	assertDecoratedElement(assert, $elm, false, childSelector);
+	asserDecoratedRoot(assert, $elm, true);
+}
+
+function assertIdsObjectOnBody (assert, obj) {
+	assert.equal(obj["repeated-id"].length,8, "Found 8 ids 'repeated-id'");
+	assert.equal(obj["repeated-id-2"].length, 4, "Found 4 ids 'repeated-id-2'");
+	assert.equal(obj["unique-id"].length, 3, "Found 3 ids 'unique-id'");
+}
+
+function assertCleanEmbedded (assert, $root, $child) {
+	
+	assert.ok( getSize($root.data("dupes")) > 0 , "Found dupes ok on root element, set up before cleaning" );
+	assert.ok( getSize($child.data("dupes")) > 0 , "Found dupes ok on child, set up before cleaning" );
+	
+	$root.idvalidator("clean");
+
+	assertCleanElement(assert, $root, "#repeated-id");
+	assertCleanElement(assert, $child, "#repeated-id");
 }
 
 QUnit.module("Perform Simple checks on ids", function(){
@@ -116,51 +149,73 @@ QUnit.module("Perform Id checks on body ", function(){
 
 });
 
-QUnit.module("Check options ", function(){
+QUnit.module("Check options and methods", function(){
 
 
-	QUnit.test( "Check clean tags decoration", function( assert ) {
+	QUnit.test( "Check clean tags decoration: method clean", function( assert ) {
 		var $cleanElm = $("body").idvalidator();
 
 		assert.ok( getSize($cleanElm.data("dupes")) > 0 , "Found dupes ok, set up before cleaning" );
 		$cleanElm = $("body").idvalidator("clean");
 
-		assertCleanElement(assert, $cleanElm);
+		assertCleanElement(assert, $cleanElm , "#repeated-id");
 	});
 
 	/**
 	 * Cleaning parent element should clean also the element in idvalidators created from child elements
 	 */
-	QUnit.test( "Check clean tags decoration for embedded validator plugin", function( assert ) {
+	QUnit.test( "Check clean tags decoration for embedded validator plugin: method clean", function( assert ) {
 		var $cleanElm = $("body").idvalidator();
 
 		var $simpleElm = $("#simple-check").idvalidator();
 
-		assert.ok( getSize($cleanElm.data("dupes")) > 0 , "Found dupes ok on body, set up before cleaning" );
-		assert.ok( getSize($simpleElm.data("dupes")) > 0 , "Found dupes ok on #simple-check, set up before cleaning" );
-		
-		$cleanElm = $("body").idvalidator("clean");
-
-		assertCleanElement(assert, $cleanElm);
-		assertCleanElement(assert, $simpleElm);
+		assertCleanEmbedded(assert, $cleanElm, $simpleElm);
 	});
 
 	/**
-	 * Return the list of repeated ids and corresponding elements if any.
+	 * Set the list of repeated ids and corresponding elements if any.
 	 * Class and data decoration is not added
 	 */
-	// QUnit.test( "Check dry mode", function( assert ) {
+	QUnit.test( "Check dry mode: option {dry: true}", function( assert ) {
 
-	// 	var $dryElm  = $("body").idvalidator("clean");
-	// 	$dryElm = $("body").idvalidator({dry : true});
+		var $dryElm  = $("body").idvalidator("clean");
+		$dryElm = $("body").idvalidator({dry : true});
 
-	// 	assertDryElement(assert, $dryElm);
+		assertDryElement(assert, $dryElm);
 
-	// 	// assert.ok($dryElm.data("dupes") == null, "No data is attached to element");
-	// 	// assert.ok($("#repeated-id", $dryElm).hasClass("idvalidator-dupe") == false, "No class decoration is added to repeated id item");
-	// 	// assert.equal( getSize($dryElm.data("dupes")), 3 , "Three duplicate ids found");
-	// 	// assert.equal( $dryElm.data("dupes")["unique-id"].length, 3 , "duplicate id (unique-id) found three times");
-	// });
+		var dupes = $dryElm.data("dupes");
+		assert.equal(getSize($dryElm.data("dupes")), 3, "Found 3 repeated id in dry element");
+
+		assertIdsObjectOnBody(assert, dupes);
+
+		
+	});
+
+	QUnit.test( "Check clean after dry mode", function( assert ) {
+
+		var $dryElm  = $("body").idvalidator("clean");
+		$dryElm = $("body").idvalidator({dry : true});
+
+		assertDryElement(assert, $dryElm);
+
+		$dryElm.idvalidator("clean");
+
+		assertCleanElement(assert, $dryElm, "#repeated-id");
+		
+		
+	});
+
+	QUnit.test( "Check clean after dry mode embedded", function( assert ) {
+
+		var $cleanElm = $("body").idvalidator("clean").idvalidator({dry : true});
+
+		var $simpleElm = $("#simple-check").idvalidator("clean").idvalidator({dry : true});
+
+		assertCleanEmbedded(assert, $cleanElm, $simpleElm);
+		
+		
+	});
+
 
 	// /**
 	//  * Decorate the html elements with more tag for visual feedback
