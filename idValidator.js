@@ -5,24 +5,23 @@
 	var DUPE_ID_CLASS = "idvalidator-dupe-id";
 	var DUPE_DATA_ATTR = "data-idvalidator-dupe";
 	var DUPE_DATA_NAME = "dupes";
-		
+	var ID_CONTAINER_CLASS = "idvalidator-id-container";
+	var HIGHLIGHT_CLASS = "idvalidator-highlighted";
+
 	
 
 	$.fn.idvalidator = function( options ) {
 
 		var prop = $.extend({
 			dry : false,
-			decorate : true
+			decorate : false,
+			hideDecoration : false
 		}, options);
 
 		var dupeIds = {};
 		var ids = {};
 
-		var __isValidatorRoot = function($elm) {
-			if ($elm.hasClass(VALIDATOR_ROOT_CLASS)) {
-				true;
-			}
-		};
+		
 
 		var __getDupesFromElm = function($elm) {
 			return $elm.data(DUPE_DATA_NAME);
@@ -32,6 +31,16 @@
 			if (!prop.dry) {
 				$elm.addClass(DUPE_CLASS + " "+ DUPE_ID_CLASS);
 				$elm.attr(DUPE_DATA_ATTR, elmId);
+
+			}
+
+			if (prop.decorate) {
+				var deco = $("<div class='"+ID_CONTAINER_CLASS+"'>");
+				deco.text("#"+elmId);
+				if (prop.hideDecoration) {
+					deco.hide();
+				}
+				$elm.prepend(deco);
 			}
 			
 		};
@@ -84,6 +93,31 @@
 			}
 		};
 
+		var __removeElmHighlight = function($elm, id) {
+			$elm.removeClass(HIGHLIGHT_CLASS);
+			$elm.removeClass(HIGHLIGHT_CLASS+"-"+id)
+		};
+
+		var __removeHighlight = function(dupes, id) {
+
+			var arrDupes = dupes[id];
+			for(var i=0; i < arrDupes.length; i++) {
+				var $elm = arrDupes[i];
+				__removeElmHighlight($elm, id);
+			}
+			
+		};
+
+		var __cleanHighlight = function($elm) {
+
+			var highlighted = $("."+HIGHLIGHT_CLASS, $elm);
+			highlighted.each(function(idx, item){
+				var $item = $(item);
+				var id = $item.attr("id");
+				__removeElmHighlight($item, id);
+			})
+		};
+
 		var __clean = function ($elm) {
 			var repIds = $elm.data(DUPE_DATA_NAME);
 
@@ -94,11 +128,16 @@
 						elms[i]
 							.removeClass(DUPE_CLASS + " " + DUPE_ID_CLASS)
 							.attr(DUPE_DATA_ATTR, null);
+						elms[i].children("."+ID_CONTAINER_CLASS).remove();
+						
 						
 					}
-						
+
 				}
 			}
+
+			__cleanHighlight($elm);
+					
 
 			$elm.data(DUPE_DATA_NAME, null);
 			$elm.removeClass(VALIDATOR_ROOT_CLASS);
@@ -109,6 +148,52 @@
 				.data(DUPE_DATA_NAME, null);
 			
 			return $elm;
+		};
+
+		var __highlight = function($elm, id) {
+			$elm.addClass(HIGHLIGHT_CLASS).addClass(HIGHLIGHT_CLASS+"-"+id);
+		};
+
+
+		var __highlightAllDupes = function (dupes) {
+			for (key in dupes) {
+				if(dupes.hasOwnProperty(key)) {
+					__highlightDupes(dupes, key);
+				}
+			}
+		}
+
+		var __highlightDupes = function(dupes, id) {
+
+			var arrDupes = dupes[id];
+			for(var i=0; i < arrDupes.length; i++) {
+				__highlight(arrDupes[i], id);
+			}
+		};
+
+		var __removeAllHighlights = function(dupes) {
+
+			for (key in dupes) {
+				if(dupes.hasOwnProperty(key)) {
+					__removeHighlight(dupes, key);
+				}
+			}
+
+			
+		};
+
+		var __getDupes = function($elm) {
+			prop.dry = true;
+
+			var objDupes = __getDupesFromElm($elm);
+
+			//return object stored in the element if exist (i.e. idvalidator alreay been called)
+			if  (objDupes != null) {
+				return objDupes;
+			}
+
+			__initIds($this);
+			return dupeIds;
 		}
 
 
@@ -124,25 +209,38 @@
 			clean : function() {
 				return __clean($this);
 			},
-			getRepeatedIds : function() {
-				prop.dry = true;
+			getRepeatedIds : function(){
+				return __getDupes($this);
+			},
 
-				var objDupes = __getDupesFromElm($this);
-
-				//return object stored in the element if exist (i.e. idvalidator alreay been called)
-				if  (objDupes != null) {
-					return objDupes;
+			highlightDupes : function () {
+				var id = arguments[0];
+				var dupes = __getDupes($this);
+				if (id != null) {
+					__highlightDupes(dupes, id);
+				} else {
+					__highlightAllDupes(dupes);
 				}
+				return $this;
+			},
 
-				__initIds($this);
-				return dupeIds;
-			}
+			removeHighlightDupes : function () {
+				var id = arguments[0];
+				var dupes = __getDupes($this);
+				if (id != null) {
+					__removeHighlight(dupes, id);
+				} else {
+					__removeAllHighlights(dupes);
+				}
+				return $this;
+			},
+
 
 		}
 
 
         if ( methods[options] ) {
-          return methods[options]( Array.prototype.slice.call( arguments, 1));
+          return methods[options].apply(this,Array.prototype.slice.call( arguments, 1));
           
         } else if ( typeof options === 'object' || !options ) {
             
