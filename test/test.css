@@ -1,14 +1,64 @@
 #test-content {
 	font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
+	width: 90%;
+	margin: auto;
 }
 
 .id-section {
-	width: 80%;
-	margin: 10px auto;
 	text-align: center;
 	min-height: 200px;
 	line-height: 200px;
 	border-radius: 5px;
 	box-shadow: 2px 2px 10px #888;
+	
+}
+
+[class ^="cols-"]:before,
+[class ^="cols-"]:after {
+	display: table;
+    content: " ";
+    clear: both;
+}
+
+[class ^="cols-"] > .id-section {
+	float: left;
+}
+
+[class ^="cols-"] > .id-section:first-child {
+	margin-left: 0;
+	clear: left;
+}
+
+[class ^="cols-"] > .id-section:last-child {
+	margin-right: 0;
+	clear: right;
+}
+
+.cols-2  > .id-section {
+	width : 45%;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.cols-3 > .id-section {
+	width : 30%;
+	margin-left: 2.5%;
+	margin-right: 2.5%;
+}
+
+.cols-6 > .id-section {
+	width: 15%;
+	margin-left: 1%;
+	margin-left: 1%;
+}
+
+@media screen and (max-width: 480px) {
+	[class ^="cols-"] > .id-section,
+	[class ^="cols-"] > .id-section:first-child,
+	[class ^="cols-"] > .id-section:last-child {
+		width: 96%;
+		margin-left: 2%;
+		margin-right: 2%;
+	}
 	
 }
