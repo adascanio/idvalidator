@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>QUnit Example</title>
+  <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+  <link rel="stylesheet" href="test.css">
+  
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <section id="test-content">
+  	<section id="simple-check" class="3-cols">
+  		<h2>Simple Check</h2>
+  	  <div id="repeated-id" class="id-section">Container with repeated id</div>
+	  <div id="repeated-id" class="id-section">Container with repeated id</div>
+	  <div id="unique-id" class="id-section">Container with unique id<div>
+  	</section>
+  	<section id="multiple-check"  class="5-cols">
+  		<h2>Multiple Check</h2>
+  	  <div id="repeated-id" class="id-section">Container with repeated id</div>
+	  <div id="repeated-id" class="id-section">Container with repeated id</div>
+	  <div id="repeated-id" class="id-section">Container with repeated id</div>
+	  <div id="repeated-id-2" class="id-section">Container with repeated id 2</div>
+	  <div id="repeated-id-2" class="id-section">Container with repeated id 2</div>
+	  <div id="unique-id" class="id-section">Container with unique id<div>
+  	</section>
+  	<section id="embedded-check" class="3-cols">
+  		<h2>Embedded Check</h2>
+  	  <div id="repeated-id" class="id-section">Container with repeated id</div>
+	  <div id="repeated-id" class="id-section 2-cols container-embed">Container with repeated id and embedded sections with repeated ids
+	  	<div id="repeated-id-2" class="id-section">Container with repeated id 2 (embedded)</div>
+	  	<div id="repeated-id-2" class="id-section">Container with repeated id 2 (embedded)</div>
+	  	<div id="repeated-id" class="id-section">Container with repeated id (embedded)</div>
+	  </div>
+	  <div id="unique-id" class="id-section">Container with unique id<div>
+  	</section>
+  	<section id="all-uniques" class="3-cols">
+  		<h2>All Uniques </h2>
+  	  <div id="unique-id-1" class="id-section">Container with unique id</div>
+	  <div id="unique-id-2" class="id-section 2-cols container-embed">Container with unique id and embedded sections with unique ids
+	  	<div id="emb-unique-id-1" class="id-section">Container with unique id 1 (embedded)</div>
+	  	<div id="emb-unique-id-2" class="id-section">Container with unique id 2 (embedded)</div>
+	  	<div id="emb-unique-id-3" class="id-section">Container with unique id 3 (embedded)</div>
+	  </div>
+	  <div id="unique-id-3" class="id-section">Container with unique id<div>
+  	</section>
+  </div>
+  <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+  <script src="../idValidator.js"></script>
+  <script src="test.js"></script>
+</body>
+</html>

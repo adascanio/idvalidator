@@ -1,0 +1,23 @@
+{
+  "name": "idvalidator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "idValidator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adascanio/idvalidator.git"
+  },
+  "author": "adascanio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adascanio/idvalidator/issues"
+  },
+  "homepage": "https://github.com/adascanio/idvalidator#readme",
+  "devDependencies": {
+    "jquery": "^2.1.4",
+    "qunitjs": "^1.20.0"
+  }
+}
