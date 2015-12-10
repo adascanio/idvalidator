@@ -15,6 +15,6 @@
 
 }
 
-.idvalidator-highlighted .idvalidator-id-decorator{
+.idvalidator-highlighted > .idvalidator-id-decorator{
 	background-color : #FFAA00;
 }
