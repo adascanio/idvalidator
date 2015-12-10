@@ -1,3 +1,4 @@
+
 #test-content {
 	font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
 	width: 90%;
@@ -52,9 +53,10 @@
 	margin-left: 1%;
 }
 
-.idvalidator-highlighted {
-	outline: 3px solid #FFAA00;
+.idvalidator-id-decorator {
+	line-height: 20px;
 }
+
 @media screen and (max-width: 480px) {
 	[class ^="cols-"] > .id-section,
 	[class ^="cols-"] > .id-section:first-child,

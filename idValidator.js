@@ -5,8 +5,9 @@
 	var DUPE_ID_CLASS = "idvalidator-dupe-id";
 	var DUPE_DATA_ATTR = "data-idvalidator-dupe";
 	var DUPE_DATA_NAME = "dupes";
-	var ID_CONTAINER_CLASS = "idvalidator-id-container";
+	var ID_CONTAINER_CLASS = "idvalidator-id-decorator";
 	var HIGHLIGHT_CLASS = "idvalidator-highlighted";
+	var POSITIONED_CALSS = "idvalidator-positioned";
 
 	
 
@@ -15,7 +16,8 @@
 		var prop = $.extend({
 			dry : false,
 			decorate : false,
-			hideDecoration : false
+			highlight : false,
+			highlightOnHover : false;
 		}, options);
 
 		var dupeIds = {};
@@ -37,10 +39,13 @@
 			if (prop.decorate) {
 				var deco = $("<div class='"+ID_CONTAINER_CLASS+"'>");
 				deco.text("#"+elmId);
-				if (prop.hideDecoration) {
-					deco.hide();
+
+				//set positioned parent element for deco placement
+				if ($elm.css("position") === "static") {
+					$elm.addClass(POSITIONED_CALSS);
 				}
-				$elm.prepend(deco);
+
+				$elm.append(deco);
 			}
 			
 		};
@@ -49,12 +54,14 @@
 			var elmId = $elm.attr("id");
 			if (elmId != null) {
 
+
 				if (dupeIds[elmId] != null) {
 					dupeIds[elmId].push($elm);
 					__decorateDupeElm($elm, elmId);
 					
 				} else if (ids[elmId] != null) {
 					__decorateDupeElm(ids[elmId], elmId);
+					__decorateDupeElm($elm, elmId);
 					
 					//first time a duplicate is found, there are 2 identical ids
 					dupeIds[elmId] = [$elm, ids[elmId]];
@@ -77,11 +84,17 @@
 		};
 
 		var __init = function($elm) {
+
 			
 			__initIds($elm);
 			
 			$elm.addClass(VALIDATOR_ROOT_CLASS);
 			$elm.data(DUPE_DATA_NAME, $.extend({},dupeIds));
+
+			if (prop.highlight) {
+				__highlightAllDupes(dupeIds);
+
+			}
 		};
 		
 
@@ -125,10 +138,13 @@
 				if (repIds.hasOwnProperty(key)) {
 					var elms = repIds[key];
 					for  (var i =0; i < elms.length; i++) {
-						elms[i]
-							.removeClass(DUPE_CLASS + " " + DUPE_ID_CLASS)
+						var $item  = elms[i];
+						
+						$item
+							.removeClass(DUPE_CLASS + " " + DUPE_ID_CLASS )
+							.removeClass(POSITIONED_CALSS)
 							.attr(DUPE_DATA_ATTR, null);
-						elms[i].children("."+ID_CONTAINER_CLASS).remove();
+						$item.children("."+ID_CONTAINER_CLASS).remove();
 						
 						
 					}
@@ -166,7 +182,9 @@
 		var __highlightDupes = function(dupes, id) {
 
 			var arrDupes = dupes[id];
-			for(var i=0; i < arrDupes.length; i++) {
+
+			var length = arrDupes != null? arrDupes.length : 0;
+			for(var i=0; i < length; i++) {
 				__highlight(arrDupes[i], id);
 			}
 		};
@@ -213,7 +231,7 @@
 				return __getDupes($this);
 			},
 
-			highlightDupes : function () {
+			highlight : function () {
 				var id = arguments[0];
 				var dupes = __getDupes($this);
 				if (id != null) {
@@ -224,7 +242,7 @@
 				return $this;
 			},
 
-			removeHighlightDupes : function () {
+			removeHighlight : function () {
 				var id = arguments[0];
 				var dupes = __getDupes($this);
 				if (id != null) {

@@ -1,0 +1,20 @@
+.idvalidator-id-decorator {
+	padding: 0px 3px;
+	position: absolute;
+	font-weight: 900;
+	top: 0;
+	left: 0;
+}
+
+.idvalidator-positioned {
+	position: relative;
+}
+
+.idvalidator-highlighted {
+	outline: 3px solid #FFAA00;
+
+}
+
+.idvalidator-highlighted .idvalidator-id-decorator{
+	background-color : #FFAA00;
+}

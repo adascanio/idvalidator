@@ -57,9 +57,11 @@ function assertCleanEmbedded (assert, $root, $child) {
 
 QUnit.module("Perform Simple checks on ids", function(){
 
-	var $elm = $("#simple-check").idvalidator();
-
+	
 	QUnit.test( "Check detection of repeated ids", function( assert ) {
+
+	  var $elm = $("#simple-check").idvalidator();
+
 
 
 	  assert.ok( $elm.data("dupes") != null, "Found dupes" );
@@ -67,10 +69,12 @@ QUnit.module("Perform Simple checks on ids", function(){
 
 	});	
 
-	$elm = $("#simple-check").idvalidator("clean");
-	$elm = $("#simple-check").idvalidator();
-
+	
 	QUnit.test( "Check css classed and data of elements with repeated ids", function( assert ) {
+
+		$elm = $("#simple-check").idvalidator("clean");
+		$elm = $("#simple-check").idvalidator();
+
 		assert.ok($("#repeated-id", $elm).hasClass("idvalidator-dupe"), "dupe class added to the first repeated element");
 		assert.ok($("#repeated-id", $elm).hasClass("idvalidator-dupe-id"), "dupe ID class added to the first repeated element");
 		assert.equal($("#repeated-id", $elm).attr("data-idvalidator-dupe"), "repeated-id", "dupe id added to data attribute");
@@ -81,39 +85,43 @@ QUnit.module("Perform Simple checks on ids", function(){
 
 QUnit.module("Perform Multiple checks on ids", function(){
 
-	var $elm = $("#multiple-check").idvalidator("clean").idvalidator();
 	
 	QUnit.test( "Check detection of repeated ids", function( assert ) {
 
-	  assert.ok( getSize($elm.data("dupes")) > 0, "Found dupes" );
-	  assert.equal( getSize($elm.data("dupes")), 2 , "Two duplicate ids found");
-	  assert.equal( $elm.data("dupes")["repeated-id"].length, 3 , "duplicate id found three times");
+		var $elm = $("#multiple-check").idvalidator("clean").idvalidator();
+	
+
+		assert.ok( getSize($elm.data("dupes")) > 0, "Found dupes" );
+		assert.equal( getSize($elm.data("dupes")), 2 , "Two duplicate ids found");
+		assert.equal( $elm.data("dupes")["repeated-id"].length, 3 , "duplicate id found three times");
 	 
 	});	
 });
 
 QUnit.module("Perform Embedded checks on ids", function(){
 
-	var $elm = $("#embedded-check").idvalidator("clean").idvalidator();
-
+	
 	QUnit.test( "Check detection of repeated ids", function( assert ) {
+		var $elm = $("#embedded-check").idvalidator("clean").idvalidator();
 
-	  assert.ok( $elm.data("dupes") != null, "Found dupes: Passed!" );
-	  assert.equal( getSize($elm.data("dupes")), 2 , "One duplicate id found");
-	  assert.equal( $elm.data("dupes")["repeated-id"].length, 3 , "duplicate id (repeated-id) found three times");
-	  assert.equal( $elm.data("dupes")["repeated-id-2"].length, 2 , "duplicate id (repeated-id-2)found two times");
+		assert.ok( $elm.data("dupes") != null, "Found dupes: Passed!" );
+		assert.equal( getSize($elm.data("dupes")), 2 , "One duplicate id found");
+		assert.equal( $elm.data("dupes")["repeated-id"].length, 3 , "duplicate id (repeated-id) found three times");
+		assert.equal( $elm.data("dupes")["repeated-id-2"].length, 2 , "duplicate id (repeated-id-2)found two times");
 
 
 	});
 
-	var $embElm = $("#embedded-check .container-embed").idvalidator("clean").idvalidator();
-
+	
 	QUnit.test( "Check detection of repeated ids", function( assert ) {
 
-	  assert.ok( $embElm.data("dupes") != null, "Found dupes: Passed!" );
-	  assert.equal( getSize($embElm.data("dupes")), 2 , "One duplicate id found");
-	  assert.equal( $embElm.data("dupes")["repeated-id"].length, 2 , "duplicate id (repeated-id) found two times");
-	  assert.equal( $embElm.data("dupes")["repeated-id-2"].length, 2 , "duplicate id (repeated-id-2)found two times");
+		var $embElm = $("#embedded-check .container-embed").idvalidator("clean").idvalidator();
+
+
+		assert.ok( $embElm.data("dupes") != null, "Found dupes: Passed!" );
+		assert.equal( getSize($embElm.data("dupes")), 2 , "One duplicate id found");
+		assert.equal( $embElm.data("dupes")["repeated-id"].length, 2 , "duplicate id (repeated-id) found two times");
+		assert.equal( $embElm.data("dupes")["repeated-id-2"].length, 2 , "duplicate id (repeated-id-2)found two times");
 
 
 	});	
@@ -121,29 +129,28 @@ QUnit.module("Perform Embedded checks on ids", function(){
 
 QUnit.module("Perform Id checks on unique ids section ", function(){
 
-	var $elm = $("#all-uniques").idvalidator();
-
+	
 	QUnit.test( "Check detection of repeated ids", function( assert ) {
+		var $elm = $("#all-uniques").idvalidator();
 
-	  assert.ok( getSize($elm.data("dupes")) === 0 , "Dupes not found" );
-	  assert.ok( $elm.data("dupes")["repeated-id-1"] == null , "duplicate id (repeated-id) not found");
-	  
-
+		assert.ok( getSize($elm.data("dupes")) === 0 , "Dupes not found" );
+		assert.ok( $elm.data("dupes")["repeated-id-1"] == null , "duplicate id (repeated-id) not found");
+	
 	});
 
 });
 
 QUnit.module("Perform Id checks on body ", function(){
 
-	var $elm = $("body").idvalidator();
-
+	
 	QUnit.test( "Check detection of repeated ids", function( assert ) {
 
-	  assert.ok( $elm.data("dupes") != null, "Found dupes: Passed!" );
-	  assert.equal( getSize($elm.data("dupes")), 3 , "Three duplicate ids found");
-	  assert.equal( $elm.data("dupes")["repeated-id"].length, 8 , "duplicate id (repeated-id) found eight times");
-	  assert.equal( $elm.data("dupes")["unique-id"].length, 3 , "duplicate id (unique-id) found three times");
+		var $elm = $("body").idvalidator();
 
+		assert.ok( $elm.data("dupes") != null, "Found dupes: Passed!" );
+		assert.equal( getSize($elm.data("dupes")), 3 , "Three duplicate ids found");
+		assert.equal( $elm.data("dupes")["repeated-id"].length, 8 , "duplicate id (repeated-id) found eight times");
+		assert.equal( $elm.data("dupes")["unique-id"].length, 3 , "duplicate id (unique-id) found three times");
 
 	});
 
@@ -252,38 +259,41 @@ QUnit.module("Check options and methods", function(){
 		
 	});
 
-
-});
-
-QUnit.module("Highlight module", function(){
-
-
-
 	/**
 	 * Decorate the html elements with more tag for visual feedback
 	 */
 	QUnit.test( "Check enable decorator mode", function( assert ) {
 		var $body = $("body").idvalidator("clean").idvalidator({decorate : true});
 
-		var $idContainer = $("#repeated-id.idvalidator-dupe .idvalidator-id-container:visible", $body);
-		assert.equal($idContainer.first().text(), "#repeated-id", "Container with repeated id contains an element with the id name");
-
-		var $body = $("body").idvalidator("clean");
-		$idContainer = $("#repeated-id.idvalidator-dupe .idvalidator-id-container", $body);
-
-		assert.ok($idContainer.size() == 0, "Container with repeated id does not contain an the id container element after cleaning");
-
-		$body = $("body").idvalidator({decorate : true, hideDecoration : true});
-
-		$idContainer = $("#repeated-id.idvalidator-dupe .idvalidator-id-container", $body);
+		var $idContainer = $("#repeated-id.idvalidator-dupe .idvalidator-id-decorator", $body);
 		assert.ok($idContainer.size() > 0, "Container with repeated id contains an the id container element");
 
-		$idContainer = $("#repeated-id.idvalidator-dupe .idvalidator-id-container:visible", $body);
-		assert.ok($idContainer.size() == 0, "Id container elements are not visible");
+		$body = $("body").idvalidator("clean");
+		$idContainer = $("#repeated-id.idvalidator-dupe .idvalidator-id-decorator", $body);
 
+		assert.equal($idContainer.size(), 0, "Container with repeated id does not contain an id container element after cleaning");
+		
 
 	});
 
+
+});
+
+QUnit.module("Highlight module", function(){
+
+	QUnit.test( "Given an non duplicate id, do nothing", function( assert ) {
+		var $body = $("body").idvalidator("clean");
+
+		var $simple = $("#simple-check").idvalidator("highlight", "unique-id");
+
+		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-unique-id", $simple).size(), 0, "No unique-id under #simple-check");
+
+		var $simple = $("#simple-check").idvalidator("clean").idvalidator("highlight", "non-existing-id");
+
+		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-non-existing-id", $simple).size(), 0, "No non-existing-id under #simple-check");
+
+		
+	});
 
 
 	/**
@@ -292,15 +302,15 @@ QUnit.module("Highlight module", function(){
 	QUnit.test( "Given an id, highlights all classes if the id is duplicate ", function( assert ) {
 		var $body = $("body").idvalidator("clean");
 
-		var $simple = $("#simple-check").idvalidator("highlightDupes", "repeated-id");
+		var $simple = $("#simple-check").idvalidator("highlight", "repeated-id");
 
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id", $simple).size(), 2, "Found 2 repeated-id under #simple-check");
 
-		$body = $("body").idvalidator("highlightDupes", "repeated-id");
+		$body = $("body").idvalidator("highlight", "repeated-id");
 
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id", $body).size(), 8, "Found 8 repeated-id under body");
 
-		$body = $("body").idvalidator("highlightDupes", "unique-id");
+		$body = $("body").idvalidator("highlight", "unique-id");
 
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-unique-id",$body).size(), 3, "Found 3 unique-id under body");
 
@@ -310,12 +320,12 @@ QUnit.module("Highlight module", function(){
 	QUnit.test( "highlights all classes if the id is duplicate ", function( assert ) {
 		var $body = $("body").idvalidator("clean");
 
-		$body.idvalidator("highlightDupes", "repeated-id");
+		$body.idvalidator("highlight", "repeated-id");
 		
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id", $body).size(), 8, "Found 8 highlighetd repeated-id under body");
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-unique-id", $body).size(), 0, "No highlighted unique-id found under body");
 
-		$body = $("body").idvalidator("highlightDupes");
+		$body = $("body").idvalidator("highlight");
 
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-unique-id",$body).size(), 3, "Found 3 highlighted unique-id under body");
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id-2",$body).size(), 4, "Found 4 highlighetd repeated-id-2 under body");
@@ -324,20 +334,20 @@ QUnit.module("Highlight module", function(){
 	});
 
 	
-	QUnit.test( "Check that higlights are correctly cleaned: patially , all, and with global clean ", function( assert ) {
+	QUnit.test( "Check that higlights are correctly cleaned: partially , all, and with global clean ", function( assert ) {
 		var $body = $("body").idvalidator("clean");
 
-		var $simple = $("#simple-check").idvalidator({decorate : true}).idvalidator("highlightDupes", "repeated-id");
-		$body = $("body").idvalidator().idvalidator("highlightDupes", "repeated-id");
-		$body = $("body").idvalidator().idvalidator("highlightDupes", "unique-id");
-		$body = $("body").idvalidator().idvalidator("highlightDupes", "repeated-id-2");
+		var $simple = $("#simple-check").idvalidator({decorate : true}).idvalidator("highlight", "repeated-id");
+		$body = $("body").idvalidator().idvalidator("highlight", "repeated-id");
+		$body = $("body").idvalidator().idvalidator("highlight", "unique-id");
+		$body = $("body").idvalidator().idvalidator("highlight", "repeated-id-2");
 
-		$simple = $("#simple-check").idvalidator("removeHighlightDupes", "repeated-id");
+		$simple = $("#simple-check").idvalidator("removeHighlight", "repeated-id");
 
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id", $simple).size(), 0, "Cleaned repeated-id under #simple-check");
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id", $body).size(), 6, "Found 6 repeated-id under body after cleaning #simple-check");
 
-		$body = $("body").idvalidator("removeHighlightDupes", "repeated-id");
+		$body = $("body").idvalidator("removeHighlight", "repeated-id");
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id", $body).size(), 0, "Cleaned repeated-id under body");
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-unique-id", $body).size(), 3, "Found 3 unique-id under body after cleaning #repeated-id");
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id-2", $body).size(), 4, "Found 4 repeated-id-2 under body after cleaning #repeated-id");
@@ -346,9 +356,9 @@ QUnit.module("Highlight module", function(){
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-unique-id", $body).size(), 0, "Cleaned unique-id under body after global clean");
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id-2", $body).size(), 0, "Cleaned repeated-id-2 under body after global clean");
 		
-		$body = $("body").idvalidator().idvalidator("highlightDupes");
+		$body = $("body").idvalidator().idvalidator("highlight");
 
-		var $mutilple = $("#multiple-check").idvalidator("removeHighlightDupes");
+		var $mutilple = $("#multiple-check").idvalidator("removeHighlight");
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id", $mutilple).size(), 0, "Cleaned repeated-id under #multiple-check after clean all under #multiple-check");
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-unique-id", $mutilple).size(), 1, "Found unique-id  under #multiple-check after clean all under #multiple-check. unique-id is not duplicate for #multiple-check");
 		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id-2", $body).size(), 2, "Found 2 repeated-id-2 under body after clean all under #multiple-check");
@@ -357,9 +367,49 @@ QUnit.module("Highlight module", function(){
 
 	});
 
+	QUnit.test( "highlights all classes when initializing the widget ", function( assert ) {
+		var $body = $("body").idvalidator("clean").idvalidator({highlight: true});
+
+		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id", $body).size(), 8, "Found 8 highlighetd repeated-id under body");
+		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-unique-id",$body).size(), 3, "Found 3 highlighted unique-id under body");
+		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id-2",$body).size(), 4, "Found 4 highlighetd repeated-id-2 under body");
+
+		$body.idvalidator("clean");
+
+		$simpleCheck = $("#simple-check").idvalidator({highlight: true});
+		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-repeated-id", $simpleCheck).size(), 2, "Found 2 highlighetd repeated-id under simple-check");
+		assert.equal($(".idvalidator-highlighted.idvalidator-highlighted-unique-id",$simpleCheck).size(), 0, "No highlighted unique-id under body");
+		
+		$body.idvalidator("clean");
+		
+	});
+
 
 
 });
+
+QUnit.module("Run plugin", function(){
+
+	QUnit.test("highlight and decorate  the body", function(assert){
+
+		var $body = $("body").idvalidator({highlight:false, decorate:true});
+		assert.ok(1==1,"Done!");
+
+		$("#multiple-check").idvalidator("highlight", "unique-id");
+
+		$("#multiple-check").idvalidator("highlight", "repeated-id-2");
+
+
+	});
+
+	// QUnit.test("highlight and decorate the multiple-check", function(assert){
+
+	// 	$("body").idvalidator("clean");
+
+	// 	$("#multiple-check").idvalidator({highlight:true, decorate:true});
+	// 	assert.ok(1==1,"Done!")
+	// });
+})
 
 
 
