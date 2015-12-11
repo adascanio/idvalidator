@@ -293,6 +293,10 @@
 				return $this;
 			},
 
+			highlightOne : function () {
+				__highlight($this, $this.attr("id"));
+			},
+
 			removeHighlight : function () {
 				var id = arguments[0];
 				var dupes = __getDupes($this);

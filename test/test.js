@@ -304,6 +304,15 @@ QUnit.module("Highlight module", function(){
 		
 	});
 
+	QUnit.test( "Highlight single element", function( assert ) {
+		
+		var $simple = $("#simple-check").idvalidator("highlightOne");
+
+		assert.ok($("#simple-check").hasClass("idvalidator-highlighted"), "Simple-check has been highlighted");
+
+		
+	});
+
 
 	/**
 	 * highlights are added with or withouth the decoration. 
